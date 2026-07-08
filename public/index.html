@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Assistant Facturation - AUTO PIECE ADAROCH</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <div class="header-content">
+        <h1>AUTO PIECE ADAROCH <span>S.A.R.L</span></h1>
+        <p>Formulaire de création de facture</p>
+      </div>
+    </header>
+
+    <main class="main-layout">
+      <section class="chat-panel">
+        <div id="chat-area" class="chat-area"></div>
+
+        <form id="chat-form" class="chat-input-row">
+          <div class="form-step">
+            <label id="step-label" for="chat-input"></label>
+            <div id="step-input-wrapper" class="step-input-wrapper"></div>
+          </div>
+          <button type="submit" id="send-btn">Suivant</button>
+        </form>
+      </section>
+
+      <section class="preview-panel">
+        <h2>Aperçu de la facture</h2>
+        <div id="preview-empty" class="preview-empty">
+          Aucune facture générée pour le moment.<br />
+          Remplissez les informations de la facture étape par étape.
+        </div>
+
+        <div id="preview-content" class="preview-content" style="display: none;">
+          <div class="preview-grid">
+            <div><strong>N° Facture</strong><span id="pv-invoice"></span></div>
+            <div><strong>Client</strong><span id="pv-client"></span></div>
+            <div><strong>Règlement</strong><span id="pv-payment"></span></div>
+            <div><strong>Date</strong><span id="pv-date"></span></div>
+          </div>
+
+          <table class="preview-table">
+            <thead>
+              <tr>
+                <th>Description</th>
+                <th>Qté</th>
+                <th>P.U. TTC</th>
+                <th>Total TTC</th>
+              </tr>
+            </thead>
+            <tbody id="pv-lines"></tbody>
+          </table>
+
+          <div class="preview-totals">
+            <div><span>Montant H.T</span><strong id="pv-ht"></strong></div>
+            <div><span>Montant TVA</span><strong id="pv-tva"></strong></div>
+            <div class="ttc-row"><span>Montant T.T.C</span><strong id="pv-ttc"></strong></div>
+          </div>
+
+          <p class="preview-words" id="pv-words"></p>
+
+          <div class="download-buttons">
+            <a id="download-docx" class="btn btn-secondary" href="#" download>Télécharger DOCX</a>
+            <a id="download-pdf" class="btn btn-primary" href="#" download>Télécharger PDF</a>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
