@@ -165,6 +165,27 @@ body {
   box-shadow: 0 0 0 3px rgba(226, 113, 29, 0.15);
 }
 
+.button-group {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+#back-btn {
+  background: var(--muted);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0 16px;
+  font-weight: 600;
+  font-family: 'Space Grotesk', sans-serif;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+#back-btn:hover { background: var(--steel); }
+#back-btn:disabled { background: #d9d6cc; cursor: not-allowed; opacity: 0.5; }
+
 #send-btn {
   background: var(--accent);
   color: #fff;

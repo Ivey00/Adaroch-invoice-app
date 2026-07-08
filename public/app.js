@@ -1,6 +1,7 @@
 const chatArea = document.getElementById("chat-area");
 const chatForm = document.getElementById("chat-form");
 const sendBtn = document.getElementById("send-btn");
+const backBtn = document.getElementById("back-btn");
 const stepLabel = document.getElementById("step-label");
 const stepInputWrapper = document.getElementById("step-input-wrapper");
 
@@ -131,6 +132,7 @@ function renderStep() {
   }
 
   sendBtn.textContent = currentStep === steps.length - 1 ? "Générer la facture" : "Suivant";
+  backBtn.disabled = currentStep === 0;
 }
 
 function getCurrentValue() {
@@ -206,6 +208,14 @@ function escapeHtml(str) {
   div.textContent = str;
   return div.innerHTML;
 }
+
+backBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  if (currentStep > 0) {
+    currentStep -= 1;
+    renderStep();
+  }
+});
 
 chatForm.addEventListener("submit", async (e) => {
   e.preventDefault();
