@@ -1,0 +1,8 @@
+{
+  "name": "Auto Piece Adaroch Invoice App",
+  "description": "Assistant Facturation pour AUTO PIECE ADAROCH S.A.R.L - Générateur automatique de factures professionnelles avec export PDF et Word.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

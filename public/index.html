@@ -3,78 +3,239 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Assistant Facturation - AUTO PIECE ADAROCH</title>
+  <title>Créateur de Facture Professionnel - AUTO PIECE ADAROCH</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="app">
     <header class="app-header">
       <div class="header-content">
-        <h1>AUTO PIECE ADAROCH <span>S.A.R.L</span></h1>
-        <p>Formulaire de création de facture</p>
+        <div class="logo-container">
+          <img src="logo2.jpeg" alt="AUTO PIECE ADAROCH Logo" class="logo-img" />
+        </div>
+        <div class="header-titles">
+          <h1>AUTO PIECE ADAROCH <span>S.A.R.L</span></h1>
+          <p>Formulaire de création de facture</p>
+        </div>
       </div>
     </header>
 
-    <main class="main-layout">
-      <section class="chat-panel">
-        <div id="chat-area" class="chat-area"></div>
+    <!-- Mobile Switcher Tabs -->
+    <div class="mobile-tabs-bar">
+      <button type="button" class="mobile-tab-btn active" id="tab-btn-saisie">
+        <span class="tab-icon">✍️</span>
+        Saisie Facture
+      </button>
+      <button type="button" class="mobile-tab-btn" id="tab-btn-apercu">
+        <span class="tab-icon">📄</span>
+        Aperçu & Téléchargement
+        <span class="badge-dot" id="preview-badge" style="display: none;"></span>
+      </button>
+    </div>
 
-        <form id="chat-form" class="chat-input-row">
-          <div class="form-step">
-            <label id="step-label" for="chat-input"></label>
-            <div id="step-input-wrapper" class="step-input-wrapper"></div>
+    <main class="main-layout">
+      <!-- Wizard Form Panel (Left) -->
+      <section class="wizard-panel" id="wizard-panel-container">
+        <!-- Progress Steps Indicator -->
+        <div class="wizard-steps-header">
+          <div class="wizard-step active" id="step-indicator-1">
+            <span class="step-num">1</span>
+            <span class="step-title">Général</span>
           </div>
-          <div class="button-group">
-            <button type="button" id="back-btn" class="btn-back">Retour</button>
-            <button type="submit" id="send-btn">Suivant</button>
+          <div class="step-connector"></div>
+          <div class="wizard-step" id="step-indicator-2">
+            <span class="step-num">2</span>
+            <span class="step-title">Client</span>
+          </div>
+          <div class="step-connector"></div>
+          <div class="wizard-step" id="step-indicator-3">
+            <span class="step-num">3</span>
+            <span class="step-title">Contenu & Total</span>
+          </div>
+        </div>
+
+        <form id="wizard-form" class="wizard-form" autocomplete="off">
+          
+          <!-- Étape 1 : Informations Générales -->
+          <div class="wizard-step-content" id="step-content-1">
+            <h3 class="step-heading">Informations de la Facture</h3>
+            <p class="step-subheading">Saisissez les détails de base de votre facture professionnelle.</p>
+
+            <div class="form-group">
+              <label class="form-label" for="invoice-number">Numéro de facture</label>
+              <div class="invoice-number-wrapper">
+                <span class="invoice-number-prefix">FC</span>
+                <input type="text" id="invoice-number" placeholder="Ex: 123" required />
+              </div>
+              <p class="form-help-text">Le préfixe "FC" est automatiquement ajouté et requis.</p>
+            </div>
+
+            <div class="form-row-grid">
+              <div class="form-group">
+                <label class="form-label" for="invoice-date">Date de la facture</label>
+                <input type="date" id="invoice-date" required />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="payment-method">Mode de règlement</label>
+                <select id="payment-method" required>
+                  <option value="ESP">ESP (Espèces)</option>
+                  <option value="CHQ">CHQ (Chèque)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Étape 2 : Informations Client -->
+          <div class="wizard-step-content" id="step-content-2" style="display: none;">
+            <h3 class="step-heading">Destinataire / Client</h3>
+            <p class="step-subheading">Sélectionnez le type de client et complétez ses coordonnées de facturation.</p>
+
+            <div class="form-group">
+              <label class="form-label" for="client-type">Type de Client</label>
+              <select id="client-type" required>
+                <option value="Client Divers">Client Divers</option>
+                <option value="Société">Société</option>
+              </select>
+            </div>
+
+            <div class="form-group" id="client-name-group" style="display: none;">
+              <label class="form-label" for="client-name">Nom de la société / Détails supplémentaires</label>
+              <textarea id="client-name" rows="4" placeholder="Saisissez le nom de la société et son adresse ou détails de facturation..."></textarea>
+              <p class="form-help-text">Si vous incluez "SARL", l'adresse sera formatée proprement à la ligne.</p>
+            </div>
+          </div>
+
+          <!-- Étape 3 : Montant & Pièces -->
+          <div class="wizard-step-content" id="step-content-3" style="display: none;">
+            <h3 class="step-heading">Saisie des Pièces & Montant TTC</h3>
+            <p class="step-subheading">Renseignez le montant total TTC et configurez les pièces de la facture.</p>
+
+            <div class="form-group">
+              <label class="form-label" for="total-ttc">Montant T.T.C Total (DH)</label>
+              <input type="number" id="total-ttc" min="1" step="any" placeholder="Ex: 1700" required />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="piece-entry-type">Méthode de saisie des pièces</label>
+              <select id="piece-entry-type" required>
+                <option value="random">Génération automatique (aléatoire)</option>
+                <option value="manual">Saisie manuelle des pièces</option>
+              </select>
+            </div>
+
+            <!-- Manual Pieces Sub-section -->
+            <div id="manual-pieces-section" class="manual-pieces-section" style="display: none;">
+              <div class="manual-parts-container">
+                <div class="manual-search-header">
+                  <label class="form-label">🔍 Rechercher et ajouter des pièces</label>
+                  <p class="form-help-text">Tapez le nom de la pièce pour l'ajouter de la base de données.</p>
+                </div>
+                
+                <div class="search-box-wrapper">
+                  <input type="text" id="manual-part-search" placeholder="Filtrer par libellé ou marque (ex: filtre, plaquette, disque...)" />
+                  <div id="search-results-dropdown" class="search-results-dropdown" style="display: none;"></div>
+                </div>
+
+                <div class="manual-selected-list" id="manual-selected-list">
+                  <!-- Active pieces items list -->
+                </div>
+
+                <div class="manual-summary-status" id="manual-summary-status">
+                  <!-- Real-time sum equality check status -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Error/Alert Banner inside Form -->
+          <div id="form-alert" class="form-alert" style="display: none;"></div>
+
+          <!-- Wizard Navigation Bar -->
+          <div class="wizard-navigation">
+            <button type="button" id="prev-btn" class="btn-prev" style="visibility: hidden;">Précédent</button>
+            <button type="submit" id="next-btn" class="btn-next">Suivant</button>
           </div>
         </form>
       </section>
 
-      <section class="preview-panel">
-        <h2>Aperçu de la facture</h2>
+      <!-- Preview Panel (Right) -->
+      <section class="preview-panel" id="preview-panel-container">
+        <h2>Aperçu en temps réel de la facture</h2>
+        
         <div id="preview-empty" class="preview-empty">
-          Aucune facture générée pour le moment.<br />
-          Remplissez les informations de la facture étape par étape.
+          <div class="preview-empty-graphic">📄</div>
+          <p>Aucune facture générée pour le moment.</p>
+          <p class="sub">Complétez le formulaire de saisie de gauche pour générer les aperçus et fichiers de téléchargement DOCX & PDF.</p>
         </div>
 
         <div id="preview-content" class="preview-content" style="display: none;">
+          <div class="preview-status-badge">Prêt pour l'impression</div>
+          
           <div class="preview-grid">
-            <div><strong>N° Facture</strong><span id="pv-invoice"></span></div>
-            <div><strong>Client</strong><span id="pv-client"></span></div>
-            <div><strong>Règlement</strong><span id="pv-payment"></span></div>
-            <div><strong>Date</strong><span id="pv-date"></span></div>
+            <div>
+              <strong>N° Facture</strong>
+              <span id="pv-invoice" class="mono-value"></span>
+            </div>
+            <div>
+              <strong>Destinataire</strong>
+              <span id="pv-client"></span>
+            </div>
+            <div>
+              <strong>Mode Règlement</strong>
+              <span id="pv-payment" class="mono-value"></span>
+            </div>
+            <div>
+              <strong>Date d'Émission</strong>
+              <span id="pv-date" class="mono-value"></span>
+            </div>
           </div>
 
-          <table class="preview-table">
-            <thead>
-              <tr>
-                <th>Description</th>
-                <th>Qté</th>
-                <th>P.U. TTC</th>
-                <th>Total TTC</th>
-              </tr>
-            </thead>
-            <tbody id="pv-lines"></tbody>
-          </table>
+          <div class="table-container">
+            <table class="preview-table">
+              <thead>
+                <tr>
+                  <th>Désignation / Libellé de la pièce</th>
+                  <th class="col-qty">Qté</th>
+                  <th class="col-price">P.U. TTC</th>
+                  <th class="col-total">Total TTC</th>
+                </tr>
+              </thead>
+              <tbody id="pv-lines"></tbody>
+            </table>
+          </div>
 
           <div class="preview-totals">
-            <div><span>Montant H.T</span><strong id="pv-ht"></strong></div>
-            <div><span>Montant TVA</span><strong id="pv-tva"></strong></div>
-            <div class="ttc-row"><span>Montant T.T.C</span><strong id="pv-ttc"></strong></div>
+            <div>
+              <span>Montant H.T :</span>
+              <strong id="pv-ht"></strong>
+            </div>
+            <div>
+              <span>T.V.A (20%) :</span>
+              <strong id="pv-tva"></strong>
+            </div>
+            <div class="ttc-row">
+              <span>Montant T.T.C :</span>
+              <strong id="pv-ttc"></strong>
+            </div>
           </div>
 
           <p class="preview-words" id="pv-words"></p>
 
           <div class="download-buttons">
-            <a id="download-docx" class="btn btn-secondary" href="#" download>Télécharger DOCX</a>
-            <a id="download-pdf" class="btn btn-primary" href="#" download>Télécharger PDF</a>
+            <a id="download-docx" class="btn-download btn-docx" href="#" download>
+              <span class="btn-icon">📁</span> Télécharger Word (DOCX)
+            </a>
+            <a id="download-pdf" class="btn-download btn-pdf" href="#" download>
+              <span class="btn-icon">🖨️</span> Télécharger PDF
+            </a>
           </div>
         </div>
       </section>
     </main>
   </div>
 
+  <script src="pieces_dataset.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

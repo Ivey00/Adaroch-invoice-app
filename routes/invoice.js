@@ -32,6 +32,7 @@ router.post("/generate-invoice", async (req, res) => {
       payment_method,
       invoice_date,
       total_ttc: totalNumber,
+      lines: req.body.lines, // Pass manual lines if present
     });
 
     return res.json({

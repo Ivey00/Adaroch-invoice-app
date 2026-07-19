@@ -75,10 +75,20 @@ async function convertDocxToPdf(docxBuffer, invoiceData) {
  * @returns {{docxPath: string, pdfPath: string, docxFileName: string, pdfFileName: string, summary: object}}
  */
 async function createInvoice(data) {
-  const { invoice_number, client, payment_method, invoice_date, total_ttc } = data;
+  const { invoice_number, client, payment_method, invoice_date, total_ttc, lines: customLines } = data;
 
   const { ht, tva, ttc } = computeHtTva(total_ttc);
-  const lines = generateInvoiceLines(ttc);
+  
+  // Format custom lines if present, otherwise generate them randomly
+  const lines = customLines 
+    ? customLines.map(l => ({
+        description: l.description,
+        quantity: l.quantity,
+        unit_price: formatMoney(l.unit_price),
+        line_total: formatMoney(l.line_total)
+      }))
+    : generateInvoiceLines(ttc);
+
   const amountWords = amountToFrenchWords(ttc);
 
   const templateContent = fs.readFileSync(TEMPLATE_PATH, "binary");

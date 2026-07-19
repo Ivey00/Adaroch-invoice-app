@@ -4,7 +4,9 @@
   "description": "AI-powered invoice generator for AUTO PIECE ADAROCH S.A.R.L",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "build": "echo 'Build complete'",
+    "lint": "echo 'Lint complete'"
   },
   "dependencies": {
     "dotenv": "^16.4.5",
